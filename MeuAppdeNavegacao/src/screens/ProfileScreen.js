@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -16,8 +17,8 @@ export default function ProfileScreen({ navigation }) {
                     onPress={() => navigation.navigate('Details')} />
             </View>
             <View style={styles.buttonContainer}>
-                <Button title="Go Back"
-                onPress={() => navigation.goBack()}/>
+                <Button title="Log Out"
+                onPress={() => navigation.navigate('Login')}/>
             </View>
         </View>
     );

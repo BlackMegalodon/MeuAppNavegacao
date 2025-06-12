@@ -1,43 +1,49 @@
 import { useState } from "react";
-import { View, Text, Button, StyleSheet, Dimensions, TextInput } from "react-native";
+import { View, Text, Button, StyleSheet, Dimensions, TextInput, Alert } from "react-native";
+import RegistroScreen from "./RegistroScreen";
 
 const windowWidth = Dimensions.get('window').width;
 
 
 export default function Login({ navigation }) {
-    const [nome, onChangeText] = useState('');
-    const [senha, onChangeNumber] = useState('');
+    const [nome, setNome] = useState('');
+    const [senha, setSenha] = useState('');
+    const [nomeregistro, setNomeregistro] = useState('');
+    const [senharegistro, setSenharegistro] = useState('');
+    
     const validar = () => {
         if (senha == senharegistro) {
             if (nome == nomeregistro) {
                 navigation.navigate('Profile');
-            }
-        }
-    }
+            };
+        };
+    };
 
     return (
         <View>
             <View style={styles.container}>
                 <Text style={styles.title}>Login</Text>
-            </View>
-            <View style={styles.input}>
-                <TextInput
+                <TextInput style={styles.input}
                     placeholder="Digite seu Nome"
-                    onChangeText={onChangeText}
+                    onChangeText={setNome}
                     value={nome}
                 />
-                <TextInput
+                <TextInput style={styles.input}
                     secureTextEntry
                     value={senha}
-                    onChangeText={onChangeNumber}
+                    onChangeText={setSenha}
                     placeholder="Digite sua Senha"
                     keyboardType="numeric"
                 />
+            <View style={styles.buttonContainer}>
+                <Button title="Logar"
+                    onPress={validar} />
             </View>
             <View style={styles.buttonContainer}>
-                <Button title="logar"
-                    onPress={() => navigation.goBack()}/>
+                <Button title="Registre-se"
+                    onPress={() => navigation.navigate('Registro')} />
             </View>
+        </View>
         </View>
     );
 }
@@ -62,6 +68,7 @@ const styles = StyleSheet.create({
     input: {
         margin: 90,
         width: windowWidth * 0.5,
-        borderRadius: 5,
+        borderWidth: 2,
+        borderRadius: 5
     },
 });

@@ -1,54 +1,54 @@
 import { useState } from "react";
-import { View, Text, Button, StyleSheet, Dimensions, TextInput } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Button, StyleSheet, Dimensions, TextInput, FlatList } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import App from "../../App";
 
 const windowWidth = Dimensions.get('window').width;
 
 
 export default function RegistroScreen({ navigation }) {
-    const [nomeregistro, onChangeText] = useState('');
-    const [senharegistro, onChangeNumber] = useState('');
-    const Registro = async () => {
-        if (nomeregistro && senharegistro) {
-            try {
-                // Salva os dados localmente
-                await AsyncStorage.setItem('usuario', JSON.stringify({
-                    nome: nomeregistro,
-                    senha: senharegistro
-                }));
-
-                Alert.alert('Sucesso', 'Usuário registrado com sucesso!');
-                navigation.navigate('Login'); // ou outra tela após registrar
-            } catch (e) {
-                Alert.alert('Erro', 'Não foi possível registrar o usuário');
-            }
-        } else {
-            Alert.alert('Atenção', 'Preencha todos os campos');
+    const [nomeregistro, setNomeregistro] = useState('');
+    const [senharegistro, setSenharegistro] = useState('');
+    const salvarUser = async (userArray) => {
+        try {
+            await AsyncStorage.setItem('usuarios', JSON.stringify(userArray));
+        } catch (error) {
+            console.log('Deu pau ai:', error);
+        }
+    };
+    const addUser = () => {
+        if (nomeregistro.trim() !== '') {
+            const newUsers = [nomeregistro, senharegistro];
+            setNomeregistro(newUsers);
+            salvarUser(newUsers);
+            setSenharegistro('');
         }
     };
 
     return (
         <View>
             <View style={styles.container}>
-                <Text style={styles.title}>Registrar</Text>
-            </View>
-            <View style={styles.input}>
-                <TextInput
+                <Text style={styles.title}>Registro</Text>
+                <TextInput style={styles.input}
                     placeholder="Digite seu Nome"
-                    onChangeText={onChangeText}
+                    onChangeText={(text) => setNomeregistro(text)}
                     value={nomeregistro}
                 />
-                <TextInput
+                <TextInput style={styles.input}
                     secureTextEntry
                     value={senharegistro}
-                    onChangeText={onChangeNumber}
-                    placeholder="uma Senha"
+                    onChangeText={(senha) => setSenharegistro(senha)}
+                    placeholder="Digite uma Senha"
                     keyboardType="numeric"
                 />
-            </View>
-            <View style={styles.buttonContainer}>
-                <Button title="Registrar"
-                    onPress={Registro} />
+                <View style={styles.buttonContainer}>
+                    <Button title="Registrar"
+                        onPress={addUser} />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <Button title="Voltar ao Login"
+                        onPress={() => navigation.navigate('Login')} />
+                </View>
             </View>
         </View>
     );
@@ -75,5 +75,6 @@ const styles = StyleSheet.create({
         margin: 90,
         width: windowWidth * 0.5,
         borderRadius: 5,
+        borderWidth: 2
     },
 });
